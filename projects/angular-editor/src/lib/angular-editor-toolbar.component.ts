@@ -12,7 +12,7 @@ import {
 import {AngularEditorService, UploadResponse} from './angular-editor.service';
 import {HttpResponse, HttpEvent} from '@angular/common/http';
 import {DOCUMENT} from '@angular/common';
-import {CustomClass} from './config';
+import {CustomClass, Font} from './config';
 import {SelectOption} from './ae-select/ae-select.component';
 import { Observable } from 'rxjs';
 
@@ -125,11 +125,21 @@ export class AngularEditorToolbarComponent {
   buttons = ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'justifyLeft', 'justifyCenter',
     'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'link'];
 
+  _fonts: Font[];
+  fontsList: SelectOption[] = [{ label: '', value: '' }];
+
   @Input() id: string;
   @Input() uploadUrl: string;
   @Input() upload: (file: File) => Observable<HttpEvent<UploadResponse>>;
   @Input() showToolbar: boolean;
-  @Input() fonts: SelectOption[] = [{label: '', value: ''}];
+
+  @Input()
+  set fonts(fonts: Font[]) {
+    if (fonts) {
+      this._fonts = fonts;
+      this.fontsList = this._fonts.map((x, i) => ({ label: x.name, value: x.name }));
+    }
+  }
 
   @Input()
   set customClasses(classes: CustomClass[]) {
